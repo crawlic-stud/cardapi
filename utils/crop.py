@@ -1,4 +1,5 @@
-from PIL import Image
+from turtle import back
+from PIL import Image, ImageDraw, ImageFont
 import numpy as np
 from smartcrop import SmartCrop
 
@@ -34,10 +35,10 @@ def apply_mask(img_array, mask):
     return np.array(result, dtype=np.uint8)
 
 
-def upscale_image(image, width, height):
-    """Upscales image."""
-    wx = width / image.width
-    hx = height / image.height
+def scale_image(image, width, height):
+    """Scales image."""
+    wx = width / image.width if width > image.width else image.width / width
+    hx = height / image.height if height > image.height else image.height / width
     factor = max(wx, hx)
     new_width, new_height = image.width * factor, image.height * factor
     new_img = image.resize((int(new_width), int(new_height)))
@@ -48,6 +49,7 @@ def smart_crop(image):
     """Smart crops an image into a rectangular shape"""
 
     cropper = SmartCrop()
+    # scale by factor to make it look better
     size = int(min(image.width, image.height) * 0.75)
     result = cropper.crop(image, size, size)
 
@@ -70,12 +72,11 @@ def shape_crop(img_path, shape_name):
 
     # load images
     image = Image.open(img_path).convert("RGB")
-    shape = Image.open(f"./shapes/{shape_name}.png")
+    shape = Image.open(f"./static/shapes/{shape_name}.png")
 
     # smart crop image
     image = smart_crop(image)
-    if shape.width > image.width or shape.height > image.height:
-        image = upscale_image(image, shape.width, shape.height)
+    image = scale_image(image, shape.width, shape.height)
 
     # get arrays for both images
     img_array = np.array(image)
@@ -103,5 +104,11 @@ def get_bytes(image):
 
 if __name__ == "__main__":
     img = shape_crop("kit2.png", Shape.heart)
-    img.show()
-    img.save("result.png", "PNG")
+    background = Image.open("./static/images/background.png")
+    background.paste(img, (250, 100), img)
+    text = u"Прива !"
+    font = ImageFont.truetype("./static/fonts/BryndanWriteBook.ttf", 200)
+    draw = ImageDraw.Draw(background)
+    draw.text((250, 1250), text, font=font)
+    background.show()
+    background.save("./static/images/result.png", "PNG")
