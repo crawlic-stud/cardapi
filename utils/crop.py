@@ -41,14 +41,22 @@ def scale_image(image, width, height):
     hx = height / image.height if height > image.height else image.height / width
     factor = max(wx, hx)
     new_width, new_height = image.width * factor, image.height * factor
-    new_img = image.resize((int(new_width), int(new_height)))
+    new_img = image.resize((round(new_width), round(new_height)))
     return new_img
 
 
 def smart_crop(image):
     """Smart crops an image into a rectangular shape"""
 
+    max_size = 800
+    if image.width > max_size or image.height > max_size:
+        factor = max(image.width, image.height) / max_size
+        new_width = image.width // factor
+        new_height = image.height // factor
+        image = image.resize((int(new_width), int(new_height)))
+
     cropper = SmartCrop()
+
     # scale by factor to make it look better
     size = int(min(image.width, image.height) * 0.75)
     result = cropper.crop(image, size, size)
@@ -99,16 +107,4 @@ def get_bytes(image):
 
     byte_array = io.BytesIO()
     image.save(byte_array, format="PNG")
-    return byte_array.getvalue()
-
-
-if __name__ == "__main__":
-    img = shape_crop("kit2.png", Shape.heart)
-    background = Image.open("./static/images/background.png")
-    background.paste(img, (250, 100), img)
-    text = u"Прива !"
-    font = ImageFont.truetype("./static/fonts/BryndanWriteBook.ttf", 200)
-    draw = ImageDraw.Draw(background)
-    draw.text((250, 1250), text, font=font)
-    background.show()
-    background.save("./static/images/result.png", "PNG")
+    return byte_array.getvalue()    
