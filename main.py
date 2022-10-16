@@ -5,7 +5,7 @@ import time
 from PIL import Image, ImageFont, ImageDraw
 from vk_getter.utils import download_from_url
 
-from utils import get_cat_photos_urls, Shape, shape_crop
+from utils import get_cat_photos_urls, Shape, shape_crop, create_simple_background
 
 
 if __name__ == "__main__":
@@ -21,7 +21,7 @@ if __name__ == "__main__":
     response = download_from_url(random_cat, ".", "cat")
 
     img = shape_crop("cat.jpeg", Shape.heart)
-    background = Image.open("./static/images/background2.png")
+    background = create_simple_background((10, 30, 100), (100, 100, 255))
     background.paste(img, (300, 550), img)
     text = u"  Ты моя любимка"
     font = ImageFont.truetype("./static/fonts/BryndanWriteBook.ttf", 150)

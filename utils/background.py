@@ -15,8 +15,4 @@ def create_simple_background(color1, color2):
     
     draw.ellipse((250, 250, 750, 750), fill=(200, 200, 10))
     bg = bg.filter(ImageFilter.BoxBlur(250))
-    bg.show()
-
-
-if __name__ == "__main__":
-    create_simple_background((10, 30, 100), (100, 100, 255))
+    return bg
