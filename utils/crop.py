@@ -45,7 +45,7 @@ def scale_image(image, width, height):
     return new_img
 
 
-def smart_crop(image):
+def smart_crop(image, factor=0.75):
     """Smart crops an image into a rectangular shape"""
 
     max_size = 800
@@ -58,7 +58,7 @@ def smart_crop(image):
     cropper = SmartCrop()
 
     # scale by factor to make it look better
-    size = int(min(image.width, image.height) * 0.75)
+    size = int(min(image.width, image.height) * factor)
     result = cropper.crop(image, size, size)
 
     box = (
@@ -72,7 +72,7 @@ def smart_crop(image):
     return cropped_image
 
 
-def shape_crop(img_path, shape_name):
+def shape_crop(img_path, shape_name, factor=1):
     """Crops images into chosen shape.
 
     Available shapes: blob, circle, cloud, diamond, door, flag, heart, party, polygon, softstar, star.
@@ -83,7 +83,7 @@ def shape_crop(img_path, shape_name):
     shape = Image.open(f"./static/shapes/{shape_name}.png")
 
     # smart crop image
-    image = smart_crop(image)
+    image = smart_crop(image, factor)
     image = scale_image(image, shape.width, shape.height)
 
     # get arrays for both images
