@@ -22,7 +22,7 @@ def get_colors(img, numcolors=10, resize=150):
     # Find dominant colors
     palette = paletted.getpalette()
     color_counts = sorted(paletted.getcolors(), reverse=True)
-    colors = list()
+    colors = []
     for i in range(numcolors):
         palette_index = color_counts[i][1]
         dominant_color = palette[palette_index*3:palette_index*3+3]
@@ -49,12 +49,12 @@ if __name__ == "__main__":
     print(colors)
 
     size = 1080, 1080
-    #palette = Preset.GREEN
-    palette = Palette(
-        (92, 179, 237),
-        (245, 184, 17),
-        (55, 114, 153),
-    )
+    palette = Preset.PINK
+    # palette = Palette(
+    #     (92, 179, 237),
+    #     (245, 184, 17),
+    #     (55, 114, 153),
+    # )
     bg = Background(palette, *size)
     background = bg.circles()
 
@@ -72,11 +72,11 @@ if __name__ == "__main__":
 
     size = 1250, 1350
     preset = Background(palette, *size)
-    new_bg = preset.random()
+    new_bg = preset.random(0.25)
     x = (new_bg.width - img.width) // 2
-    y = (new_bg.height - img.height) // 4
+    y = (new_bg.height - img.height) // 2
     new_bg.paste(background, (x, y), background)
     draw = ImageDraw.Draw(new_bg)
-    draw.text((100, 1100), text=" Люблю подписчиков", font=font, fill=palette.accent_color)
-    draw.text((100, 1200), text="    канала ЙОУ", font=font, fill=palette.accent_color)
+    # draw.text((100, 1100), text=" Люблю подписчиков", font=font, fill=palette.accent_color)
+    # draw.text((100, 1200), text="    канала ЙОУ", font=font, fill=palette.accent_color)
     new_bg.save("./static/images/result.png", "PNG")
