@@ -6,7 +6,7 @@ from turtle import back
 from PIL import Image, ImageFont, ImageDraw
 from vk_getter.utils import download_from_url
 
-from utils import get_cat_photos_urls, Shape, shape_crop, scale_image
+from utils import get_photos_urls, Shape, shape_crop, DOG_GROUPS
 #from utils.background import Background, Preset
 from models import Preset, Background, Palette
 
@@ -32,29 +32,32 @@ def get_colors(img, numcolors=10, resize=150):
 
 
 if __name__ == "__main__":
-    #cats = get_cat_photos_urls()
-    #with open("static/urls/cats.json", "w") as f:
-    #    json.dump(cats, f, indent=4)
+    # dogs = get_photos_urls(DOG_GROUPS, 5000)
+    # with open("static/urls/dogs.json", "w") as f:
+    #     json.dump(dogs, f, indent=4)
 
-    with open("static/urls/cats.json", "r") as f:
-        cats = json.load(f)
+    with open("static/urls/dogs.json", "r") as f:
+        dogs = json.load(f)
 
-    random_cat = random.choice(cats)
-    print(random_cat)
+    random_animal = random.choice(dogs)
+    print(random_animal)
 
-    response = download_from_url(random_cat, ".", "cat")
-    img = shape_crop("cat.jpeg", Shape.heart, 0.75)
+    shape = Shape.HEART
+
+    response = download_from_url(random_animal, ".", "cat")
+    img = shape_crop("cat.jpeg", shape, 0.75)
 
     colors = get_colors(img, 4)[1:]
     print(colors)
 
     size = 1080, 1080
-    palette = Preset.PINK
-    # palette = Palette(
-    #     (92, 179, 237),
-    #     (245, 184, 17),
-    #     (55, 114, 153),
-    # )
+    # palette = Palette(*colors)
+    # palette = Preset.NEON
+    palette = Palette(
+        (252, 113, 38),
+        (245, 193, 71),
+        (122, 193, 250),
+    )
     bg = Background(palette, *size)
     background = bg.circles()
 
@@ -68,11 +71,11 @@ if __name__ == "__main__":
     # draw.text((50, 500), text="всех котиков :)", font=font, fill="black")
     #background.show()
     background.save("./static/images/result.png", "PNG")
-    background = shape_crop("./static/images/result.png", Shape.heart)
+    background = shape_crop("./static/images/result.png", shape)
 
     size = 1250, 1350
     preset = Background(palette, *size)
-    new_bg = preset.random(0.25)
+    new_bg = preset.random(0.0)
     x = (new_bg.width - img.width) // 2
     y = (new_bg.height - img.height) // 2
     new_bg.paste(background, (x, y), background)

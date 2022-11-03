@@ -1,41 +1,39 @@
-from turtle import back
-from PIL import Image, ImageDraw, ImageFont
+from PIL import Image
 import numpy as np
 from smartcrop import SmartCrop
 
 import io
-from enum import Enum
 
 
 class Shape:
-    blob: str = "blob"
-    circle: str = "circle"
-    cloud: str = "cloud"
-    diamond: str = "diamond"
-    door: str = "door"
-    flag: str = "flag"
-    heart: str = "heart"
-    party: str = "party"
-    polygon: str = "polygon"
-    softstar: str = "softstar"
-    star: str = "star"
+    BLOB: str = "blob"
+    CIRCLE: str = "circle"
+    CLOUD: str = "cloud"
+    DIAMOND: str = "diamond"
+    DOOR: str = "door"
+    FLAG: str = "flag"
+    HEART: str = "heart"
+    PARTY: str = "party"
+    POLYGON: str = "polygon"
+    SOFTSTAR: str = "softstar"
+    STAR: str = "star"
 
 
-def get_mask(img_array):
+def get_mask(img_array: np.array) -> np.array:
     """Create mask from every black pixel on the image."""
     filter_color = np.array([255] * img_array.shape[-1])
     mask = np.where(np.all(img_array == filter_color, axis=-1), 1, 0)
     return mask
 
 
-def apply_mask(img_array, mask):
+def apply_mask(img_array: np.array, mask: np.array) -> np.array:
     """Applies mask on image array."""
     mask_rgb = np.stack((mask,) * img_array.shape[-1], axis=-1)
     result = img_array * mask_rgb
     return np.array(result, dtype=np.uint8)
 
 
-def scale_image(image, width, height):
+def scale_image(image: Image.Image, width: int, height: int) -> Image.Image:
     """Scales image."""
     wx = width / image.width if width > image.width else image.width / width
     hx = height / image.height if height > image.height else image.height / width
@@ -45,8 +43,8 @@ def scale_image(image, width, height):
     return new_img
 
 
-def smart_crop(image, factor=0.75):
-    """Smart crops an image into a rectangular shape"""
+def smart_crop(image: Image.Image, factor: int = 0.75) -> Image.Image:
+    """Smart crops an image into a rectangular shape, scaling it down by factor"""
 
     max_size = 800
     if image.width > max_size or image.height > max_size:
@@ -72,11 +70,14 @@ def smart_crop(image, factor=0.75):
     return cropped_image
 
 
-def shape_crop(img_path, shape_name, factor=1):
+def shape_crop(img_path: str, shape_name: str | Shape, factor: int = 1) -> Image.Image:
     """Crops images into chosen shape.
 
     Available shapes: blob, circle, cloud, diamond, door, flag, heart, party, polygon, softstar, star.
     """
+
+    # check if shape_name is valid
+    getattr(Shape, shape_name.upper())  
 
     # load images
     image = Image.open(img_path).convert("RGB")
@@ -102,7 +103,7 @@ def shape_crop(img_path, shape_name, factor=1):
     return result_img
 
 
-def get_bytes(image):
+def get_bytes(image: Image.Image) -> bytes:
     """Returns image as byte array"""
 
     byte_array = io.BytesIO()
