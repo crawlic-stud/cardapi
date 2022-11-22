@@ -6,7 +6,7 @@ from turtle import back
 from PIL import Image, ImageFont, ImageDraw
 from vk_getter.utils import download_from_url
 
-from utils import get_photos_urls, Shape, shape_crop, DOG_GROUPS
+from utils import get_photos_urls, Shape, shape_crop, DOG_GROUPS, get_bytes
 #from utils.background import Background, Preset
 from models import Preset, Background, Palette
 
@@ -31,11 +31,7 @@ def get_colors(img, numcolors=10, resize=150):
     return colors
 
 
-if __name__ == "__main__":
-    # dogs = get_photos_urls(DOG_GROUPS, 5000)
-    # with open("static/urls/dogs.json", "w") as f:
-    #     json.dump(dogs, f, indent=4)
-
+def get_test_image(*colors):
     with open("static/urls/dogs.json", "r") as f:
         dogs = json.load(f)
 
@@ -47,17 +43,13 @@ if __name__ == "__main__":
     response = download_from_url(random_animal, ".", "cat")
     img = shape_crop("cat.jpeg", shape, 0.75)
 
-    colors = get_colors(img, 4)[1:]
-    print(colors)
+    # colors = get_colors(img, 4)[1:]
+    # print(colors)
 
     size = 1080, 1080
     # palette = Palette(*colors)
     # palette = Preset.NEON
-    palette = Palette(
-        (252, 113, 38),
-        (245, 193, 71),
-        (122, 193, 250),
-    )
+    palette = Palette(*colors)
     bg = Background(palette, *size)
     background = bg.circles()
 
@@ -83,3 +75,12 @@ if __name__ == "__main__":
     # draw.text((100, 1100), text=" Люблю подписчиков", font=font, fill=palette.accent_color)
     # draw.text((100, 1200), text="    канала ЙОУ", font=font, fill=palette.accent_color)
     new_bg.save("./static/images/result.png", "PNG")
+    return get_bytes(new_bg)
+
+
+if __name__ == "__main__":
+    get_test_image(
+        (252, 113, 38),
+        (245, 193, 71),
+        (122, 193, 250)
+    )

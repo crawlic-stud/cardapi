@@ -1,7 +1,9 @@
+import os
+
 from vk_getter import VKGetter
 
-from config import TOKEN
 
+TOKEN = os.getenv("TOKEN")
 getter = VKGetter(TOKEN)
 
 
