@@ -46,7 +46,8 @@ def get_test_image(*colors):
     # colors = get_colors(img, 4)[1:]
     # print(colors)
 
-    size = 1080, 1080
+    start_size = 1000
+    size = start_size + 80, start_size + 80
     # palette = Palette(*colors)
     # palette = Preset.NEON
     palette = Palette(*colors)
@@ -65,7 +66,7 @@ def get_test_image(*colors):
     background.save("./static/images/result.png", "PNG")
     background = shape_crop("./static/images/result.png", shape)
 
-    size = 1250, 1350
+    size = start_size + start_size//4, start_size + start_size//3
     preset = Background(palette, *size)
     new_bg = preset.random(0.0)
     x = (new_bg.width - img.width) // 2
