@@ -1,24 +1,22 @@
 from models.preset import Preset
-from image_utils import ImageText
+from models.image_text import ImageText
 
 color = (255, 0, 255)
-text = 'Ты самая классная самая лучшая самая красивая спасибо что ты есть\n\nТы солнышко мое мой лучик света!'
+text = ' Ты самая классная самая лучшая самая красивая спасибо что ты есть\n\nТы солнышко мое мой лучик света!'
 font = './static/fonts/BryndanWriteBook.ttf'
-img = ImageText((800, 600), font, Preset.GREEN)
+img = ImageText((800, 600), font, Preset.NEON)
 
-#write_text_box will split the text in many lines, based on box_width
-#`place` can be 'left' (default), 'right', 'center' or 'justify'
-#write_text_box will return (box_width, box_calculed_height) so you can
-#know the size of the wrote text
 
-img.write_text_box((300, 50), text * 1, box_width=200,
-                   font_size=15, color=color, place="right")
+def main():
+    y = 100
+    result = img.write_title((None, y), "Моей девушке!", 
+                    max_height=50, max_width=600)
+    if not result:
+        return
 
-# You don't need to specify text size: can specify max_width or max_height
-# and tell write_text to fill the text in this space, so it'll compute font
-# size automatically
-#write_text will return (width, height) of the wrote text
-img.write_text(None, "Python is a cool programming language.", 
-                max_height=250, max_width=600, color=color)
+    result = img.write_additional_text((100, y + result[1]), text * 7, box_width=600,
+                    font_size=11, place="center")
+    img.background.save('sample-imagetext.png')
 
-img.background.save('sample-imagetext.png')
+
+main()
