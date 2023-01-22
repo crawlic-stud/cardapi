@@ -8,7 +8,7 @@ from vk_getter.utils import download_from_url
 
 from utils import get_photos_urls, Shape, shape_crop, DOG_GROUPS, get_bytes
 #from utils.background import Background, Preset
-from models import Preset, Background, Palette
+from models import Preset, Background, Palette, Card
 
 
 def get_colors(img, numcolors=10, resize=150):
@@ -31,57 +31,24 @@ def get_colors(img, numcolors=10, resize=150):
     return colors
 
 
-def get_test_image(*colors):
-    with open("static/urls/dogs.json", "r") as f:
-        dogs = json.load(f)
-
-    random_animal = random.choice(dogs)
-    print(random_animal)
-
-    shape = Shape.HEART
-
-    response = download_from_url(random_animal, ".", "cat")
-    img = shape_crop("cat.jpeg", shape, 0.75)
-
-    # colors = get_colors(img, 4)[1:]
-    # print(colors)
-
-    start_size = 1000
-    size = start_size + 80, start_size + 80
-    # palette = Palette(*colors)
-    # palette = Preset.NEON
-    palette = Palette(*colors)
-    bg = Background(palette, *size)
-    background = bg.circles()
-
-    x = (background.width - img.width) // 2
-    y = (background.height - img.height) // 2
-    background.paste(img, (x, y), img)
-    text = u"  Ты прекраснее"
-    font = ImageFont.truetype("./static/fonts/BryndanWriteBook.ttf", 120)
-    draw = ImageDraw.Draw(background)
-    # draw.text((50, 100), text, font=font, fill="black")
-    # draw.text((50, 500), text="всех котиков :)", font=font, fill="black")
-    #background.show()
-    background.save("./static/images/result.png", "PNG")
-    background = shape_crop("./static/images/result.png", shape)
-
-    size = start_size + start_size//4, start_size + start_size//3
-    preset = Background(palette, *size)
-    new_bg = preset.random(0.0)
-    x = (new_bg.width - img.width) // 2
-    y = (new_bg.height - img.height) // 2
-    new_bg.paste(background, (x, y), background)
-    draw = ImageDraw.Draw(new_bg)
-    # draw.text((100, 1100), text=" Люблю подписчиков", font=font, fill=palette.accent_color)
-    # draw.text((100, 1200), text="    канала ЙОУ", font=font, fill=palette.accent_color)
-    new_bg.save("./static/images/result.png", "PNG")
-    return get_bytes(new_bg)
-
-
 if __name__ == "__main__":
-    get_test_image(
-        (252, 113, 38),
-        (245, 193, 71),
-        (122, 193, 250)
-    )
+    with open("static/urls/cats.json", "r") as f:
+        animals = json.load(f)
+
+    random_animal = random.choice(animals)
+
+    card = Card(random_animal, (1000, 1500))
+
+    card \
+        .shape_image(Shape.HEART) \
+        .add_palette( 
+            Palette(
+                (255, 144, 144),
+                (144, 255, 144),
+                (144, 144, 255)
+            )
+        ) \
+        .add_background() \
+        .add_outline(50) \
+        .scale_image(0.85) \
+        .save_image("./static/images/result.png")

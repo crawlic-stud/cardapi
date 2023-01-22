@@ -1,3 +1,5 @@
+from typing import Union
+
 from PIL import Image
 import numpy as np
 from smartcrop import SmartCrop
@@ -57,6 +59,7 @@ def smart_crop(image: Image.Image, factor: int = 0.75) -> Image.Image:
 
     # scale by factor to make it look better
     size = int(min(image.width, image.height) * factor)
+    image = image.convert("RGB")
     result = cropper.crop(image, size, size)
 
     box = (
@@ -70,7 +73,7 @@ def smart_crop(image: Image.Image, factor: int = 0.75) -> Image.Image:
     return cropped_image
 
 
-def shape_crop(img_path: str, shape_name: str | Shape, factor: int = 1) -> Image.Image:
+def shape_crop(image: Union[str, Image.Image], shape_name: Union[str, Shape], factor: int = 1) -> Image.Image:
     """Crops images into chosen shape.
 
     Available shapes: blob, circle, cloud, diamond, door, flag, heart, party, polygon, softstar, star.
@@ -80,7 +83,8 @@ def shape_crop(img_path: str, shape_name: str | Shape, factor: int = 1) -> Image
     getattr(Shape, shape_name.upper())  
 
     # load images
-    image = Image.open(img_path).convert("RGB")
+    if isinstance(image, str):
+        image = Image.open(image).convert("RGB")
     shape = Image.open(f"./static/shapes/{shape_name}.png")
 
     # smart crop image

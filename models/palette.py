@@ -1,14 +1,19 @@
+from typing import Union, Optional
+
 from dataclasses import dataclass
+
+
+Color = Optional[Union[str, tuple[int, int, int]]]
 
 
 @dataclass
 class Palette:
     """Palette class for storing all colors in a card."""
-    background_color: str | tuple[int, int, int] = (0, 0, 0) # black
-    primary_color: str | tuple[int, int, int] | None = None
-    secondary_color: str | tuple[int, int, int] | None = None
-    accent_color: str | tuple[int, int, int] | None = (255, 255, 255) # white
-    additional_color: str | tuple[int, int, int] | None = None
+    background_color: Color = (0, 0, 0) # black
+    primary_color: Color = None
+    secondary_color: Color = None
+    accent_color: Color = (255, 255, 255) # white
+    additional_color: Color = None
 
     def __post_init__(self):
         if self.primary_color is None:
