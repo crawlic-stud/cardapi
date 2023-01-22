@@ -1,14 +1,10 @@
 import json
 import random
-import time
-from turtle import back
 
-from PIL import Image, ImageFont, ImageDraw
-from vk_getter.utils import download_from_url
+from PIL import Image
 
-from utils import get_photos_urls, Shape, shape_crop, DOG_GROUPS, get_bytes
-#from utils.background import Background, Preset
-from models import Preset, Background, Palette, Card
+from utils import Shape
+from models import Palette, Card
 
 
 def get_colors(img, numcolors=10, resize=150):
@@ -37,7 +33,8 @@ if __name__ == "__main__":
 
     random_animal = random.choice(animals)
 
-    card = Card(random_animal, (900, 1600))
+    width, height = 1000, 1500
+    card = Card(random_animal, (width, height))
 
     card \
         .shape_image(Shape.HEART) \
@@ -53,16 +50,5 @@ if __name__ == "__main__":
         .add_background() \
         .add_outline(150) \
         .scale_image(0.75) \
-        .save_image("./static/images/result1.png") \
-        .add_palette( 
-            Palette(
-                (255, 138, 130),
-                (240, 122, 255),
-                (0, 173, 217),
-                (176, 0, 32),
-                (155, 155, 255),
-            )
-        ) \
-        .add_background() \
-        .add_outline(150) \
-        .save_image("./static/images/result2.png") 
+        .move_image(200) \
+        .save_image("./static/images/result.png")
