@@ -37,18 +37,32 @@ if __name__ == "__main__":
 
     random_animal = random.choice(animals)
 
-    card = Card(random_animal, (1000, 1500))
+    card = Card(random_animal, (900, 1600))
 
     card \
         .shape_image(Shape.HEART) \
         .add_palette( 
             Palette(
-                (255, 144, 144),
-                (144, 255, 144),
-                (144, 144, 255)
+                (255, 138, 130),
+                (240, 122, 255),
+                (255, 173, 217),
+                (176, 0, 32),
+                (134, 28, 255),
             )
         ) \
         .add_background() \
-        .add_outline(50) \
-        .scale_image(0.85) \
-        .save_image("./static/images/result.png")
+        .add_outline(150) \
+        .scale_image(0.75) \
+        .save_image("./static/images/result1.png") \
+        .add_palette( 
+            Palette(
+                (255, 138, 130),
+                (240, 122, 255),
+                (0, 173, 217),
+                (176, 0, 32),
+                (155, 155, 255),
+            )
+        ) \
+        .add_background() \
+        .add_outline(150) \
+        .save_image("./static/images/result2.png") 

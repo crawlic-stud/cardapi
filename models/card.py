@@ -66,20 +66,23 @@ class Card:
         self.bg_image = bg.random(opacity)
         return self
 
-    def add_outline(self, width: int, blur: int = 250, opacity: float = 0.0):
+    def add_outline(self, width: int, blur: int = 250):
         if self.bg_image is None:
             raise ValueError("You should add background first.")
         if self.shape is None:
             raise ValueError("You should shape image first.")
 
         outline_img_size = self.image.width + width, self.image.height + width
-        outline_img = Background(self.palette, *outline_img_size, blur).random(opacity)
+        outline_img = Background(
+            self.palette, *outline_img_size, blur
+        ).outline()
+
         x, y = get_center(outline_img, self.image)
         outline_img.paste(self.image, (x, y), self.image)
         outline_img = shape_crop(outline_img, self.shape, 1)
-        self.image = outline_img
+        self.image = outline_img.resize(self.image.size)
         return self
-
+        
     def _get_image(self):
         img = self.bg_image
         x, y = get_center(img, self.image)
