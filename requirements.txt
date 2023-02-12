@@ -2,5 +2,3 @@ Pillow
 smartcrop
 vk_getter
 python-dotenv
-fastapi
-uvicorn
