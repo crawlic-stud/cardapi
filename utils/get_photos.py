@@ -3,7 +3,7 @@ import os
 from vk_getter import VKGetter
 
 
-TOKEN = os.getenv("TOKEN")
+TOKEN = os.getenv("VK_TOKEN")
 getter = VKGetter(TOKEN)
 
 
