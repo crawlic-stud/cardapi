@@ -1,4 +1,4 @@
-from functools import wraps
+from pathlib import Path
 
 from PIL import Image
 from PIL import ImageDraw
@@ -17,12 +17,12 @@ TITLE_SYMBOL_LIMIT = 69
 # TODO: integrate with PIL Image class (paste text on PIL Image)
 
 class ImageText:
-    def __init__(self, size: tuple[int, int], font_path: str, palette: Palette):
+    def __init__(self, size: tuple[int, int], font_path: Path, palette: Palette):
         self.size = size
-        self.font_path = font_path
+        self.font_path = str(font_path)
         self.palette = palette
-        self.background = Image.new('RGBA', self.size, color=(0, 0, 0, 0))
-        self.draw = ImageDraw.Draw(self.background)
+        self.image = Image.new('RGBA', self.size, color=(0, 0, 0, 0))
+        self.draw = ImageDraw.Draw(self.image)
 
     def write_title(
         self, 

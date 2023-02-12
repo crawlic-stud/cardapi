@@ -4,7 +4,8 @@ import random
 from PIL import Image
 
 from utils import Shape
-from models import Palette, Card
+from models import Palette, Card, Preset
+from models.font import Font
 
 
 def get_colors(img, numcolors=10, resize=150):
@@ -28,27 +29,35 @@ def get_colors(img, numcolors=10, resize=150):
 
 
 if __name__ == "__main__":
-    with open("static/urls/cats.json", "r") as f:
+    with open("static/urls/dogs.json", "r") as f:
         animals = json.load(f)
 
     random_animal = random.choice(animals)
 
-    width, height = 1000, 1500
+    width, height = 1000, 1200
     card = Card(random_animal, (width, height))
 
     card \
         .shape_image(Shape.HEART) \
-        .add_palette( 
+        .change_palette( 
+            # Palette(
+            #     (184, 238, 255),
+            #     (120, 248, 255),
+            #     (191, 255, 207),
+            #     (19, 127, 173),
+            #     (30, 129, 138),
+            # )
             Palette(
-                (255, 138, 130),
-                (240, 122, 255),
-                (255, 173, 217),
-                (176, 0, 32),
-                (134, 28, 255),
+                # *get_colors(card.image, 3),
+                # *get_colors(card.image, 2),
             )
         ) \
-        .add_background() \
+        .change_background() \
         .add_outline(150) \
         .scale_image(0.75) \
-        .move_image(200) \
+        .move_image(150) \
+        .set_font(Font.variant_1) \
+        .add_title("я хочу дарувати тобi тепло кожен день!") \
+        .add_text("спасибi, що змушуеш мене посмiхатися i відчувати себе живою! ти робиш мое життя яскравим i незабутнiм! давай будемо поруч один з одним завжди!") \
         .save_image("./static/images/result.png")
+        

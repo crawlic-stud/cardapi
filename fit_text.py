@@ -9,14 +9,15 @@ img = ImageText((800, 600), font, Preset.NEON)
 
 def main():
     y = 100
-    result = img.write_title((None, y), "Моей девушке!", 
-                    max_height=50, max_width=600)
+    result = img.write_title(
+        (None, y), "Моей девушке!", max_height=50, max_width=600
+    )
     if not result:
         return
 
-    result = img.write_additional_text((100, y + result[1]), text * 7, box_width=600,
-                    font_size=11, place="center")
-    img.background.save('sample-imagetext.png')
+    result = img.write_additional_text(
+        (100, y + result[1]), text * 7, box_width=600, font_size=11, place="center")
+    img.image.save('sample-imagetext.png')
 
 
 main()
