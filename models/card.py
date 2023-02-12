@@ -51,6 +51,7 @@ class Card:
         self._font_size = 36
         self._title_height = 100
         self._padding_x = 50
+        self._title_y_pos = 0
 
     def shape_image(self, shape: Shape, scale_factor: int = 0.75):
         self.image = shape_crop(self.image, shape, scale_factor)
@@ -146,6 +147,7 @@ class Card:
     def add_title(self, text: str, padding: int = 10):
         width = self.size[0]
         y_pos = self._calculate_title_y(padding)
+        self._title_y_pos = y_pos
         result = self.image_text.write_title(
             pos=(None, y_pos), 
             text=text, 
@@ -153,12 +155,12 @@ class Card:
             max_width=width - self._padding_x * 2,
         )
         if result:
-            self._title_height = result[1]
+            self._title_y_pos += result[1]
         return self
 
     def add_text(self, text: str, padding: int = 10, place: str = "center"):
         width = self.size[0]
-        y_pos = self._calculate_title_y(padding) + padding + self._title_height
+        y_pos = padding + self._title_y_pos
         self.image_text.write_additional_text(
             pos=(self._padding_x, y_pos),
             text=text,
