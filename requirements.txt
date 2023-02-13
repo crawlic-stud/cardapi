@@ -2,3 +2,5 @@ Pillow
 smartcrop
 vk_getter
 python-dotenv
+# aiogram
+# aiogram_dialog
