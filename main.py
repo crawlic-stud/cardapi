@@ -6,6 +6,7 @@ from PIL import Image
 from utils import Shape
 from models import Palette, Card, Preset
 from models.font import Font
+from bot.main import start_bot
 
 
 def get_colors(img, numcolors=10, resize=150):
@@ -34,10 +35,14 @@ if __name__ == "__main__":
 
     random_animal = random.choice(animals)
 
-    width, height = 1000, 1200
+    width, height = 2000, 2200
     # print(random_animal)
     # card = Card(random_animal, (width, height))
     card = Card("static/images/elmira.JPG", (width, height))
+
+    # print(Font.get_all())
+    start_bot()
+    exit(0)
 
     card \
         .shape_image(Shape.HEART) \
@@ -94,7 +99,7 @@ if __name__ == "__main__":
         ) \
         .change_background() \
         .add_outline(150) \
-        .scale_image(0.75) \
+        .scale_image(1.75) \
         .move_image(150) \
         .set_font(Font.variant_5) \
         .set_font_size(42) \
@@ -104,5 +109,5 @@ if __name__ == "__main__":
         .add_text("Как много разных валентинок Кружится в снежном феврале. \nОдна из них — моя к тебе!", 
                   padding=0) \
         .save_image("./static/images/result.png") \
-        .show_image()
+        # .show_image()
         
